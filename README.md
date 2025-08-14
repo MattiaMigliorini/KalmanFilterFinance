@@ -1,5 +1,5 @@
 # Kalman filter in Finance
-![Andamentoesempio](Andamento_spot_future.png)
+![Andamentoesempio](img/Andamento_spot_future.png)
 The main feature of Futures based on the commodity **Crude Oil** is that the spot price $S_t$ of this commodity is not directly observable in the financial markets. What is observable is only the price this takes on the various derivative financial instruments (Futures) that guarantee delivery in the future. Getting more specific, the problem arises where the green line is not directly observable at time $t$, in fact, on commodities such as crude oil (WTI Crude oil) there is no direct access to this variable. This happens because much of the crude oil traded in the world belongs to the over-the-counter (OTC) market, that is, the set of trades that take place outside the official financial circuits and that make the exchange of this commodity non-standardized with respect to the contracts found in the financial markets. The following project aims to apply a filtering technique known in the literature as Kalman filtering in order to estimate a possible reconstruction of the $S_t$ spot price. The particularity of Kalman filtering is that it is based on a hypothesis of the evolution of the variable that is not directly observable ($S_t$), and on the basis of this and an observable quantity (which will be the price of the futures $F_t$ based on the same commodity) it predicts the future step that the unobservable variable will take
 
 ## Motivation
@@ -8,15 +8,15 @@ This algorithm reflects in a very general way the assumptions being made about p
 
 A Kalman filter needs an assumption of evolution of the hidden variable (usually defined by the notation $X_t$) and an assumption of evolution of the observable variable (usually defined by the notation $Z_t$). For example, if one assumes that one is observing a constant (at each time $X_t = c)$, the system has an evolution of the type $X_t = X_{t-1}$ trivially, and that then the problem is the observation at time $t$, $Z_t$, is affected by Gaussian noise, i.e., $Z_t = X_t + ε_t$ with $ε_t ∼ N (0, r^2)$. An alternative assumption that can be made is that instead it is the process itself that is affected by Gaussian noise , i.e., $X_t = X_{t-1} + u_t$ with $u_t ∼ N (0, q^2)$ and that the measurement made is very precise and actually reflects the state $X_t$ with very little uncertainty, i.e., $Z_t = X_t + ε_t$ with $ε_t ∼ N (0, (0.1)^2)$. Thus, a Kalman Filter reflects in a very general way the assumptions that are made about process *evolution* (not directly observable,  Spot price for example) and *process measurement* (directly Futures price). A Kalman filter is a tool designed to fit these assumptions; The figure below shows the two examples just mentioned and how the filter fits the assumptions made.
 
-![Esempio iniziale](InitialExample.png)
+![Esempio iniziale](img/InitialExample.png)
 
 
 ### About the filter 
 Without going into too much theoretical detail, which can be studied in any signal theory book, we therefore want to describe how the whole filtering process acts in general. The following image shows a general schematic of Linear filtering
-![Schema filtri Kalman](Schema_filtri_kalman.png)
+![Schema filtri Kalman](img/Schema_filtri_kalman.png)
 
 What is special about the Kalman filter is that it hypothesizes a theoretical evolution and corrects it with a measurement. It sounds like fantastic, as it performs a mix of theory and reality that all Machine Learning scholars always like. Just to give some mathematical context in the image below you can see how in the prediction step both the variable $X_t$ and the variable $Z_t$ have their own Gaussian distribution, in particular the distribution of $X_t$, in dark gray in the image on the left, represents the theoretical distribution predicted by that variable before making an observation about reality ($Z_t$). In the image on the right, you can see how after measuring $Z_t$, a new distribution is created for $X_t$ called the “a posteriori” distribution.
-![Distribuzione](Kalmandistribution.png)
+![Distribuzione](img/Kalmandistribution.png)
 
 Expressed in the financial problem under consideration, we assume how the spot price $S_t$ of the raw material could be distributed, how the price of the Future based on the same raw material $F_t$ is distributed, and in accordance with the relationship that binds them (which we will see later)
 we estimate the next value of $S_{t+1}$. It follows that from a historical trend of a future we can extract the historical trend of the spot price
@@ -67,7 +67,7 @@ $$
 
 
 We now have all the ingredients to define the Kalman filter of the following design, in fact we have an equation describing the unobservable variables and an equation describing the observable variables (we speak in the plural because we can use several futures at a time, each with a different maturity) . Thus, the following evolution over the time period $\Delta t$ is obtained:
-![equazKalman_2fattori](equazKalman_2fattori.png)
+![equazKalman_2fattori](img/equazKalman_2fattori.png)
 
 Regarding the covariance matrices, the matrix of unobservable variables $Q$ is
 
@@ -162,7 +162,7 @@ Therefore, once the filters have been run over a sufficiently wide time window, 
 
 Why did I use this? Because this model has many parameters and, with few observations, optimization often failed.
 
-![loglh](loglh.png)
+![loglh](img/loglh.png)
 
 ## Example of results
 Best parameters found with a Random Grid Search on 10 000 sets of parameters:  
@@ -176,7 +176,7 @@ $\rho$= -0.981
 
 With these parameters, the following estimated trend for the spot price $S_t$ and convenience yield $C_t$ (dotted green line and shown on the right scale) can be obtained.
 
-![grafico finale](Graficofinale.png)
+![grafico finale](img/Graficofinale.png)
 
 ## How to contribute
 
